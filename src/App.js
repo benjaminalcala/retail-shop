@@ -1,6 +1,7 @@
 import React from 'react';
 import {Switch, Route, Redirect} from 'react-router-dom';
 import {connect} from 'react-redux';
+import {createStructuredSelector} from 'reselect';
 
 import './App.css';
 
@@ -13,13 +14,19 @@ import {auth, createUserProfileDocument} from './firebase/firebase.utils';
 import {setCurrentUser} from './redux/user/user.actions';
 
 
+import {selectCurrentUser} from './redux/user/user.selectors';
+
 
 class App extends React.Component{
 
   unsubscribeFromAuth = null;
 
   componentDidMount(){
+
+
     const {setCurrentUser} = this.props;
+
+
      this.unsubscribeFromAuth = auth.onAuthStateChanged(async userAuth => {
        if(userAuth){
         const userRef = await createUserProfileDocument(userAuth);
@@ -33,6 +40,7 @@ class App extends React.Component{
        }else{
          setCurrentUser(userAuth)
        }
+       
        
       
     })
@@ -61,8 +69,9 @@ class App extends React.Component{
 
 }
 
-const mapStateToProps = ({user: {currentUser}}) => ({
-  currentUser
+const mapStateToProps = createStructuredSelector({
+  currentUser: selectCurrentUser,
+ 
 })
 
 const mapDispatchToProps = dispatch => ({

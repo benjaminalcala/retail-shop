@@ -16,3 +16,13 @@ export const selectCollection = collectionUrlKey => createSelector(
     [selectCollectionsData],
     collections => collections ? (collections[collectionUrlKey]) : null
 )
+
+export const selectIsFetchingCollections = createSelector(
+    [selectCollections],
+    collections => collections.isFetching
+)
+
+export const selectIsCollectionsLoaded = createSelector(
+    [selectCollections],
+    collections => !!collections
+)
